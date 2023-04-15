@@ -2,7 +2,83 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-lib/compare/1.23.1...HEAD
+[Unreleased]: https://github.com/chaostoolkit/chaostoolkit-lib/compare/1.27.3...HEAD
+
+## [1.27.3][] - 2022-03-31
+
+[1.27.3]: https://github.com/chaostoolkit/chaostoolkit-lib/compare/1.27.2...1.27.3
+
+### Changed
+
+- Ensure experiment level controls are only played once
+
+## [1.27.2][] - 2022-03-23
+
+[1.27.2]: https://github.com/chaostoolkit/chaostoolkit-lib/compare/1.27.1...1.27.2
+
+### Changed
+
+- Ensure experiment level controls are applied to activity level controls
+  when activity declares a control too [#251][251]
+
+[251]: https://github.com/chaostoolkit/chaostoolkit-lib/issues/251
+
+## [1.27.1][] - 2022-02-25
+
+[1.27.1]: https://github.com/chaostoolkit/chaostoolkit-lib/compare/1.27.0...1.27.1
+
+### Changed
+
+- Ensure dynamic configuration can reference itself [#250][250]
+
+[250]: https://github.com/chaostoolkit/chaostoolkit-lib/issues/250
+
+## [1.27.0][] - 2022-02-17
+
+[1.27.0]: https://github.com/chaostoolkit/chaostoolkit-lib/compare/1.26.0...1.27.0
+
+### Added
+
+- `chaoslib.canonical_json` that returns a fairly canoniocal view of the
+  experiment
+- `chaoslib.experiment_hash` which builds a hash of the experiment's canonical
+  json view
+- When no steady-state hypothesis strategy was provided, we use the default one
+
+## [1.26.0][] - 2022-02-16
+
+[1.26.0]: https://github.com/chaostoolkit/chaostoolkit-lib/compare/1.25.0...1.26.0
+
+### Changed
+
+* Pass the event registry to the `configure_control` control if requested
+  through `event_registry` argument. This allows to add your own event handler
+  to the main registry. Mostly for quite advanced cases only.
+
+## [1.25.0][] - 2022-01-05
+
+[1.25.0]: https://github.com/chaostoolkit/chaostoolkit-lib/compare/1.24.0...1.25.0
+
+### Changed
+
+* Requires Python 3.7 as a baseline as Python 3.6 is now EOL
+
+### Added
+
+* Added Python 3.10 support
+
+
+## [1.24.0][] - 2021-12-20
+
+[1.24.0]: https://github.com/chaostoolkit/chaostoolkit-lib/compare/1.23.1...1.24.0
+
+### Added
+
+* `configuration.py` now have the ability to have load a dynamic configurations.
+  The dynamic config is a regular activity (probe) in the configuration section.
+  If there's a use-case for setting a configuration dynamically right before
+  the experiment is starting. It executes the probe, and then the return value
+  of this probe will be the config you wish to set.
 
 ## [1.23.1][] - 2021-12-02
 
@@ -10,11 +86,14 @@
 
 ### Added
 
-* Configuration now supports providing a type to convert Environment Variables
-  to a provided type. Addressing the issue [here](https://github.com/chaostoolkit/chaostoolkit/issues/254#issue-1062797767)
-  To specifically convert an Environment Variable loaded into configuration to
-  a type, provide the `env_var_type` key in the same block as the "env" declaration.
-  Supported values are: `str, int, float, bytes`.
+* Configuration now supports providing a type to convert environment variables
+  to a provided type. Addressing this [issue][254]
+
+  To specifically convert an environment variable loaded into configuration to
+  a type, provide the `env_var_type` key in the same block as the "env"
+  declaration. Supported values are: `str, int, float, bytes`.
+
+[254]: https://github.com/chaostoolkit/chaostoolkit/issues/254#issue-1062797767
 
 ## [1.23.0][] - 2021-11-05
 
