@@ -16,7 +16,7 @@ from logzero import logger
 
 from chaoslib import __version__, substitute
 from chaoslib.activity import run_activities
-from chaoslib.configuration import load_configuration
+from chaoslib.configuration import load_configuration, load_dynamic_configuration
 from chaoslib.control import (
     Control,
     cleanup_controls,
@@ -278,6 +278,7 @@ class Runner:
         self.secrets = load_secrets(
             experiment.get("secrets", {}), self.config, secret_vars
         )
+        self.config = load_dynamic_configuration(self.config, self.secrets)
 
     def cleanup(self):
         pass
@@ -330,8 +331,15 @@ class Runner:
         dry = experiment.get("dry", None)
         if dry and isinstance(dry, Dry):
             logger.warning(f"Running experiment with dry {dry.value}")
-        initialize_global_controls(experiment, configuration, secrets, settings)
-        initialize_controls(experiment, configuration, secrets)
+        initialize_global_controls(
+            experiment, configuration, secrets, settings, event_registry=event_registry
+        )
+        initialize_controls(
+            experiment, configuration, secrets, event_registry=event_registry
+        )
+
+        if not strategy:
+            strategy = Strategy.DEFAULT
 
         logger.info(f"Steady-state strategy: {strategy.value}")
         rollback_strategy = (

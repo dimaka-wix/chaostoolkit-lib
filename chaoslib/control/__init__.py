@@ -35,7 +35,10 @@ global_controls = []
 
 
 def initialize_controls(
-    experiment: Experiment, configuration: Configuration = None, secrets: Secrets = None
+    experiment: Experiment,
+    configuration: Configuration = None,
+    secrets: Secrets = None,
+    event_registry: "EventHandlerRegistry" = None,  # noqa: F821
 ):
     """
     Initialize all declared controls in the experiment.
@@ -60,7 +63,13 @@ def initialize_controls(
         provider = control.get("provider")
         if provider and provider["type"] == "python":
             try:
-                initialize_control(control, experiment, configuration, secrets)
+                initialize_control(
+                    control,
+                    experiment,
+                    configuration,
+                    secrets,
+                    event_registry=event_registry,
+                )
             except Exception:
                 logger.debug(
                     "Control initialization '{}' failed. "
@@ -136,6 +145,7 @@ def initialize_global_controls(
     configuration: Configuration,
     secrets: Secrets,
     settings: Settings,
+    event_registry: "EventHandlerRegistry" = None,  # noqa: F821
 ):
     """
     Load and initialize controls declared in the settings.
@@ -157,6 +167,7 @@ def initialize_global_controls(
                     configuration=configuration,
                     secrets=secrets,
                     settings=settings,
+                    event_registry=event_registry,
                 )
             except Exception:
                 logger.debug(
@@ -348,19 +359,18 @@ def get_context_controls(
     if level in ["method", "rollback"]:
         return [deepcopy(c) for c in top_level_controls if c.get("automatic", True)]
 
-    for c in controls:
+    for c in controls[:]:
         if "ref" in c:
             for top_level_control in top_level_controls:
                 if c["ref"] == top_level_control["name"]:
                     controls.append(deepcopy(top_level_control))
                     break
         else:
-            for tc in top_level_controls:
+            for tc in reversed(top_level_controls):
                 if c.get("name") == tc.get("name"):
-                    break
-            else:
-                if tc.get("automatic", True):
-                    controls.append(deepcopy(tc))
+                    continue
+                if (level != "experiment") and tc.get("automatic", True):
+                    controls.insert(0, deepcopy(tc))
 
     return controls
 

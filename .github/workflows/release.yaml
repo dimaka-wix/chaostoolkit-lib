@@ -53,7 +53,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
-        python-version: '3.6'
+        python-version: '3.7'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -70,4 +70,3 @@ jobs:
       uses: actions/upload-artifact@v2-preview
       with:
         name: chaostoolkit-packages
-        path: dist/chaostoolkit-lib-*

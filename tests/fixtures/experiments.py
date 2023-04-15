@@ -854,3 +854,89 @@ ExperimentWithInvalidControls["controls"] = [
         "provider": {"type": "python", "module": "fixtures.controls.dummy_validator"},
     }
 ]
+
+
+ExperimentWithTopLevelControlsAndActivityControl = {
+    "title": "Hello world!",
+    "description": "Say hello world.",
+    "controls": [
+        {
+            "name": "tc1",
+            "provider": {
+                "type": "python",
+                "module": "fixtures.controls.dummy_sums",
+                "arguments": {"values": [4, 5]},
+            },
+        },
+        {
+            "name": "tc2",
+            "automatic": False,
+            "provider": {
+                "type": "python",
+                "module": "fixtures.controls.dummy_sums",
+                "arguments": {"values": [6, 7]},
+            },
+        },
+        {
+            "name": "tc3",
+            "provider": {
+                "type": "python",
+                "module": "fixtures.controls.dummy_sums",
+                "arguments": {"values": [6, 7]},
+            },
+        },
+    ],
+    "method": [
+        {
+            "type": "action",
+            "name": "pretend-we-do-stuff",
+            "background": True,
+            "provider": {
+                "type": "python",
+                "module": "builtins",
+                "func": "sum",
+                "arguments": {"iterable": [1, 2]},
+            },
+            "controls": [
+                {
+                    "name": "lc1",
+                    "provider": {
+                        "type": "python",
+                        "module": "fixtures.controls.dummy_sums",
+                        "arguments": {"values": [2, 3]},
+                    },
+                }
+            ],
+        },
+    ],
+}
+
+
+ExperimentWithOnlyTopLevelControls = deepcopy(ExperimentNoControls)
+ExperimentWithOnlyTopLevelControls["controls"] = [
+    {
+        "name": "tc1",
+        "provider": {
+            "type": "python",
+            "module": "fixtures.controls.dummy_sums",
+            "arguments": {"values": [1, 2]},
+        },
+    },
+    {
+        "name": "tc2",
+        "automatic": False,
+        "provider": {
+            "type": "python",
+            "module": "fixtures.controls.dummy_sums",
+            "arguments": {"values": [3, 4]},
+        },
+    },
+    {
+        "name": "tc3",
+        "provider": {
+            "type": "python",
+            "module": "fixtures.controls.dummy_sums",
+            "arguments": {"values": [5, 6]},
+        },
+    },
+]
